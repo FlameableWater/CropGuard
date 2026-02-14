@@ -5,9 +5,11 @@ function Navbar() {
         <nav className="flex justify-between items-center px-10 py-4 bg-white shadow-sm">
 
             {/* Logo */}
+            <Link to="/">
             <div className="text-2xl font-bold text-green-600">
                 PlantHealth
             </div>
+            </Link>
 
             {/* Menu */}
             <div className="hidden md:flex items-center gap-6">
@@ -17,9 +19,11 @@ function Navbar() {
                     </a>
                 </Link>
 
-                <button className="border border-green-600 text-green-600 px-4 py-2 rounded-lg hover:bg-green-50">
-                    Scan Plant
-                </button>
+                <Link to="/scan">
+                    <button className="border border-green-600 text-green-600 px-4 py-2 rounded-lg hover:bg-green-50">
+                        Scan Plant
+                    </button>
+                </Link>
 
                 <Link to="/signup">
                     <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
