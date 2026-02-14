@@ -23,7 +23,7 @@ function Navbar() {
 
                 <Link to="/signup">
                     <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-                        Sign Uppies
+                        Sign Up
                     </button>
                 </Link>
 
