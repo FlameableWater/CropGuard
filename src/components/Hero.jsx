@@ -1,4 +1,5 @@
 import plantImage from "../assets/plant.jpg";
+import { Link } from "react-router-dom";
 
 function Hero() {
     return (
@@ -19,10 +20,11 @@ function Hero() {
                     Instantly detect diseases in your potato and tomato plants.
                     Get expert recommendations to keep your garden healthy.
                 </p>
-
-                <button className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
-                    Start Scanning Now
-                </button>
+                <Link to="/scan">
+                    <button className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
+                        Start Scanning Now
+                    </button>
+                </Link>
             </div>
 
             {/* Right Side */}

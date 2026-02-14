@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function CTA() {
     return (
         <section className="bg-green-600 text-white py-16 md:py-20 px-6 md:px-10 text-center">
@@ -12,10 +14,11 @@ function CTA() {
                     Start detecting plant diseases in seconds using our AI-powered tool.
                     Fast, accurate, and easy to use.
                 </p>
-
-                <button className="bg-white text-green-600 font-semibold px-8 py-4 rounded-lg hover:bg-gray-100 transition">
-                    Get Started
-                </button>
+                <Link to="/scan">
+                    <button className="bg-white text-green-600 font-semibold px-8 py-4 rounded-lg hover:bg-gray-100 transition">
+                        Get Started
+                    </button>
+                </Link>
 
             </div>
 
