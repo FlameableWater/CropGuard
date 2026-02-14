@@ -5,9 +5,11 @@ function Navbar() {
         <nav className="flex justify-between items-center px-10 py-4 bg-white shadow-sm">
 
             {/* Logo */}
+            <Link to="/">
             <div className="text-2xl font-bold text-green-600">
                 PlantHealth
             </div>
+            </Link>
 
             {/* Menu */}
             <div className="hidden md:flex items-center gap-6">

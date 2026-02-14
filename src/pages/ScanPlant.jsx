@@ -1,15 +1,18 @@
 import React from "react";
 import { Leaf, Camera, CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function ScanPlant() {
     return (
         <div className="min-h-screen bg-[#c7d8cf]">
             {/* Navbar */}
             <nav className="bg-white shadow-sm py-4 px-6 flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                    <Leaf className="text-green-600" />
-                    <span className="font-semibold text-gray-800">PlantHealth</span>
-                </div>
+                <Link to="/">
+                    <div className="flex items-center gap-2">
+                        <Leaf className="text-green-600" />
+                        <span className="font-semibold text-gray-800">PlantHealth</span>
+                    </div>
+                </Link>
                 <a href="/" className="text-gray-600 hover:text-green-600">
                     Home
                 </a>
