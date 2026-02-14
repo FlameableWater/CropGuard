@@ -76,13 +76,6 @@ export default function ScanPlant() {
 
                         </div>
 
-                        <button
-                            onClick={handleButtonClick}
-                            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition"
-                        >
-                            Select Potato
-                        </button>
-
                         <input
                             type="file"
                             accept="image/*"
@@ -91,37 +84,31 @@ export default function ScanPlant() {
                             onChange={handleFileChange}
                             className="hidden"
                         />
-                        <button
-                            onClick={() => handleButtonClick("tomato")}
-                            className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition"
-                        >
-                            Select Tomato
-                        </button>
 
+                        {/* Tomato Card */}
+                        <div className="border-2 border-red-300 rounded-xl p-8 bg-red-50 flex flex-col items-center text-center">
+                            <div className="text-5xl mb-4">🍅</div>
+                            <h3 className="text-xl font-semibold mb-2">Tomato</h3>
+                            <p className="text-gray-600 mb-6">
+                                Identify tomato plant health issues
+                            </p>
+
+                            <button
+                                onClick={() => handleButtonClick("tomato")}
+                                className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition"
+                            >
+                                Select Tomato
+                            </button>
+                        </div>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            capture="environment"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            className="hidden"
+                        />
                     </div>
-
-                    <input
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        ref={fileInputRef}
-                        onChange={handleFileChange}
-                        className="hidden"
-                    />
-
-                </div>
-
-                {/* Tomato Card */}
-                <div className="border-2 border-red-300 rounded-xl p-8 bg-red-50 flex flex-col items-center text-center">
-                    <div className="text-5xl mb-4">🍅</div>
-                    <h3 className="text-xl font-semibold mb-2">Tomato</h3>
-                    <p className="text-gray-600 mb-6">
-                        Identify tomato plant health issues
-                    </p>
-
-                    <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition">
-                        Select Tomato
-                    </button>
                 </div>
             </div>
 
