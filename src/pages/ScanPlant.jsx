@@ -1,8 +1,24 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Leaf, Camera, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function ScanPlant() {
+    const fileInputRef = useRef(null);
+    const [selectedPlant, setSelectedPlant] = useState(null);
+
+    const handleButtonClick = (plant) => {
+        setSelectedPlant(plant);
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            console.log("Plant:", selectedPlant);
+            console.log("File:", file);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#c7d8cf]">
             {/* Navbar */}
@@ -48,9 +64,13 @@ export default function ScanPlant() {
                                 Detect potato diseases and leaf issues
                             </p>
 
-                            <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition">
+                            <button
+                                onClick={() => handleButtonClick("potato")}
+                                className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition"
+                            >
                                 Select Potato
                             </button>
+
                         </div>
 
                         {/* Tomato Card */}
@@ -61,10 +81,23 @@ export default function ScanPlant() {
                                 Identify tomato plant health issues
                             </p>
 
-                            <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition">
+                            <button
+                                onClick={() => handleButtonClick("tomato")}
+                                className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition"
+                            >
                                 Select Tomato
                             </button>
+
                         </div>
+
+                        <input
+                            type="file"
+                            accept="image/*"
+                            capture="environment"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            className="hidden"
+                        />
 
                     </div>
                 </div>
