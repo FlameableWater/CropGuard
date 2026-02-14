@@ -8,6 +8,7 @@ import CTA from "./components/CTA";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import LearnMore from "./pages/LearnMore";
+import ScanPlant from "./pages/ScanPlant";
 
 function Home() {
   return (
@@ -28,6 +29,7 @@ function App() {
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/learn" element={<LearnMore />} />
+      <Route path="/scan" element={<ScanPlant />} />
     </Routes>
   );
 }
