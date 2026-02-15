@@ -3,16 +3,33 @@ import { X, RefreshCw } from "lucide-react";
 
 export default function CameraCapture({ onCapture, onClose }) {
 	const videoRef = useRef(null);
-	const [stream, setStream] = useState(null);
+	// FIX: Use useRef instead of useState for the stream.
+	// This ensures the cleanup function acts on the LIVE stream, not a stale state.
+	const streamRef = useRef(null);
 	const [error, setError] = useState(null);
 
-	// DEFINITIONS MOVED UP (Before useEffect)
+	const stopCamera = () => {
+		// FIX: Check the ref, not the state
+		if (streamRef.current) {
+			streamRef.current.getTracks().forEach((track) => {
+				track.stop(); // This physically turns off the camera hardware light
+			});
+			streamRef.current = null;
+		}
+	};
+
 	const startCamera = async () => {
+		// Always ensure previous stream is killed before starting a new one
+		stopCamera();
+
 		try {
 			const mediaStream = await navigator.mediaDevices.getUserMedia({
-				video: { facingMode: "environment" }, // Prefer back camera
+				video: { facingMode: "environment" },
 			});
-			setStream(mediaStream);
+
+			// Store in ref immediately
+			streamRef.current = mediaStream;
+
 			if (videoRef.current) {
 				videoRef.current.srcObject = mediaStream;
 			}
@@ -22,13 +39,6 @@ export default function CameraCapture({ onCapture, onClose }) {
 			setError(
 				"Camera access denied. Please allow permissions or upload a file.",
 			);
-		}
-	};
-
-	const stopCamera = () => {
-		if (stream) {
-			stream.getTracks().forEach((track) => track.stop());
-			setStream(null);
 		}
 	};
 
@@ -43,14 +53,20 @@ export default function CameraCapture({ onCapture, onClose }) {
 		ctx.drawImage(videoRef.current, 0, 0);
 		const imageUrl = canvas.toDataURL("image/jpeg");
 
+		// Stop hardware immediately after capture
 		stopCamera();
 		onCapture(imageUrl);
 	};
 
-	// USE EFFECT MOVED DOWN (After definitions)
+	// Lifecycle Management
 	useEffect(() => {
 		startCamera();
-		return () => stopCamera(); // Cleanup on unmount
+
+		// CLEANUP FUNCTION: This runs when component unmounts
+		// (e.g., user clicks Back, Upload, or leaves page)
+		return () => {
+			stopCamera();
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -60,7 +76,10 @@ export default function CameraCapture({ onCapture, onClose }) {
 				<div className="text-white text-center p-6 bg-gray-900/50 backdrop-blur-sm rounded-xl mx-4">
 					<p className="mb-4 text-red-300 font-medium">{error}</p>
 					<button
-						onClick={onClose}
+						onClick={() => {
+							stopCamera();
+							onClose();
+						}}
 						className="text-white bg-red-600 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors"
 					>
 						Close Camera
@@ -76,16 +95,17 @@ export default function CameraCapture({ onCapture, onClose }) {
 						className="absolute inset-0 w-full h-full object-cover"
 					/>
 
-					{/* Overlay Guide (Visual only) */}
 					<div className="absolute inset-0 border-2 border-white/30 m-8 rounded-lg pointer-events-none" />
 					<p className="absolute top-4 bg-black/50 backdrop-blur-md text-white px-4 py-1.5 rounded-full text-xs font-medium tracking-wide border border-white/10">
 						Align leaf within frame
 					</p>
 
-					{/* Controls */}
 					<div className="absolute bottom-8 flex items-center gap-10 z-20">
 						<button
-							onClick={onClose}
+							onClick={() => {
+								stopCamera();
+								onClose();
+							}}
 							className="bg-black/40 p-3.5 rounded-full text-white backdrop-blur-md hover:bg-black/60 transition-all border border-white/10"
 							title="Close Camera"
 						>
@@ -107,7 +127,7 @@ export default function CameraCapture({ onCapture, onClose }) {
 								startCamera();
 							}}
 							className="bg-black/40 p-3.5 rounded-full text-white backdrop-blur-md hover:bg-black/60 transition-all border border-white/10"
-							title="Switch/Restart Camera"
+							title="Restart Camera"
 						>
 							<RefreshCw size={24} />
 						</button>
