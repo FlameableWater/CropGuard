@@ -1,37 +1,50 @@
 import { Routes, Route } from "react-router-dom";
+import MainLayout from "./components/layout/MainLayout";
+import AuthLayout from "./components/layout/AuthLayout";
 
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import HowItWorks from "./components/HowItWorks";
-import SupportedPlants from "./components/SupportedPlants";
-import CTA from "./components/CTA";
+// Placeholder imports for now - we will build these next
+import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
-import LearnMore from "./pages/LearnMore";
 import ScanPlant from "./pages/ScanPlant";
-
-function Home() {
-  return (
-    <>
-      <Navbar />
-      <Hero />
-      <HowItWorks />
-      <SupportedPlants />
-      <CTA />
-    </>
-  );
-}
+import LearnMore from "./pages/LearnMore";
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/learn" element={<LearnMore />} />
-      <Route path="/scan" element={<ScanPlant />} />
-    </Routes>
-  );
+	return (
+		<Routes>
+			{/* Public Routes wrapped in MainLayout */}
+			<Route
+				path="/"
+				element={
+					<MainLayout>
+						<Home />
+					</MainLayout>
+				}
+			/>
+			<Route
+				path="/learn"
+				element={<LearnMore />}
+			/>
+			<Route
+				path="/scan"
+				element={<ScanPlant />}
+			/>
+			<Route element={<AuthLayout />}>
+				<Route
+					path="/signin"
+					element={<SignIn />}
+				/>
+				<Route
+					path="/signup"
+					element={<SignUp />}
+				/>
+			</Route>
+			{/* We will eventually add an AuthLayout for SignIn/SignUp 
+         so they don't show the main Navbar 
+      */}
+			{/* <Route path="/signin" element={<SignIn />} /> */}
+		</Routes>
+	);
 }
 
 export default App;

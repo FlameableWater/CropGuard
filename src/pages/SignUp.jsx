@@ -1,190 +1,155 @@
-import { Link } from "react-router-dom";
-import plantImage from "../assets/plant.jpg";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Mail, Lock, User, Loader2 } from "lucide-react";
+import AuthInput from "../components/ui/AuthInput";
 
-function SignUp() {
-    return (
-        <div className="min-h-screen bg-[#e6f2ee] flex items-center justify-center px-6 py-10">
+export default function SignUp() {
+	const navigate = useNavigate();
+	const [loading, setLoading] = useState(false);
+	const [errors, setErrors] = useState({});
+	const [formData, setFormData] = useState({
+		fullName: "",
+		email: "",
+		password: "",
+		confirmPassword: "",
+		terms: false,
+	});
 
-            <div className="w-full max-w-6xl grid md:grid-cols-2 gap-12 items-center">
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		setErrors({});
+		const newErrors = {};
 
-                {/* LEFT SIDE */}
-                <div className="hidden md:flex flex-col justify-center">
+		// 1. ROBUST VALIDATION
+		if (!formData.fullName) newErrors.fullName = "Full name is required";
+		if (!formData.email) newErrors.email = "Email is required";
+		if (formData.password.length < 8)
+			newErrors.password = "Password must be at least 8 chars";
+		if (formData.password !== formData.confirmPassword) {
+			newErrors.confirmPassword = "Passwords do not match";
+		}
+		if (!formData.terms) newErrors.terms = "You must accept the terms";
 
-                    <div className="mb-6">
-                        <div className="bg-green-600 w-16 h-16 flex items-center justify-center rounded-full text-white text-2xl mb-6">
-                            🌿
-                        </div>
+		if (Object.keys(newErrors).length > 0) {
+			setErrors(newErrors);
+			return;
+		}
 
-                        <h1 className="text-5xl font-bold mb-3">
-                            PlantHealth
-                        </h1>
+		// 2. MOCK REGISTRATION
+		setLoading(true);
+		setTimeout(() => {
+			setLoading(false);
+			navigate("/scan");
+		}, 1500);
+	};
 
-                        <p className="text-gray-600 text-lg">
-                            Join thousands of gardeners protecting their plants with AI
-                        </p>
-                    </div>
+	return (
+		<div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+			<div className="text-center mb-8">
+				<h1 className="text-2xl font-bold text-gray-900">Create Account</h1>
+				<p className="text-gray-500 text-sm mt-2">
+					Join thousands of farmers today
+				</p>
+			</div>
 
-                    <img
-                        src={plantImage}
-                        alt="Plant"
-                        className="rounded-2xl shadow-lg mb-8"
-                    />
+			<form onSubmit={handleSubmit}>
+				<AuthInput
+					label="Full Name"
+					icon={User}
+					placeholder="John Doe"
+					value={formData.fullName}
+					onChange={(e) =>
+						setFormData({ ...formData, fullName: e.target.value })
+					}
+					error={errors.fullName}
+				/>
 
-                    {/* Feature List */}
-                    <div className="space-y-4 text-gray-700">
-                        <div className="flex items-start gap-3">
-                            <span className="text-green-600 text-lg">✔</span>
-                            <div>
-                                <p className="font-medium">Instant Disease Detection</p>
-                                <p className="text-sm text-gray-500">
-                                    Get results in seconds with AI-powered analysis
-                                </p>
-                            </div>
-                        </div>
+				<AuthInput
+					label="Email Address"
+					type="email"
+					icon={Mail}
+					placeholder="you@example.com"
+					value={formData.email}
+					onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+					error={errors.email}
+				/>
 
-                        <div className="flex items-start gap-3">
-                            <span className="text-green-600 text-lg">✔</span>
-                            <div>
-                                <p className="font-medium">Expert Recommendations</p>
-                                <p className="text-sm text-gray-500">
-                                    Receive personalized care advice
-                                </p>
-                            </div>
-                        </div>
+				<AuthInput
+					label="Password"
+					type="password"
+					icon={Lock}
+					placeholder="Create a password"
+					value={formData.password}
+					onChange={(e) =>
+						setFormData({ ...formData, password: e.target.value })
+					}
+					error={errors.password}
+				/>
 
-                        <div className="flex items-start gap-3">
-                            <span className="text-green-600 text-lg">✔</span>
-                            <div>
-                                <p className="font-medium">Track Your Plants</p>
-                                <p className="text-sm text-gray-500">
-                                    Monitor health history over time
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+				<AuthInput
+					label="Confirm Password"
+					type="password"
+					icon={Lock}
+					placeholder="Confirm password"
+					value={formData.confirmPassword}
+					onChange={(e) =>
+						setFormData({ ...formData, confirmPassword: e.target.value })
+					}
+					error={errors.confirmPassword}
+				/>
 
-                </div>
+				<div className="mb-6">
+					<label className="flex items-start gap-2 text-sm text-gray-600 cursor-pointer">
+						<input
+							type="checkbox"
+							className="mt-1 rounded border-gray-300 text-green-600 focus:ring-green-500"
+							checked={formData.terms}
+							onChange={(e) =>
+								setFormData({ ...formData, terms: e.target.checked })
+							}
+						/>
+						<span>
+							I agree to the{" "}
+							<Link
+								to="#"
+								className="text-green-600 hover:underline"
+							>
+								Terms of Service
+							</Link>{" "}
+							and{" "}
+							<Link
+								to="#"
+								className="text-green-600 hover:underline"
+							>
+								Privacy Policy
+							</Link>
+						</span>
+					</label>
+					{errors.terms && (
+						<p className="text-xs text-red-500 mt-1 font-medium">
+							{errors.terms}
+						</p>
+					)}
+				</div>
 
-                {/* RIGHT SIDE FORM */}
-                <div className="bg-white p-8 md:p-10 rounded-2xl shadow-md w-full">
+				<button
+					type="submit"
+					disabled={loading}
+					className="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+				>
+					{loading ? <Loader2 className="animate-spin" /> : "Create Account"}
+				</button>
+			</form>
 
-                    <h2 className="text-3xl font-bold mb-2">
-                        Create Account
-                    </h2>
-
-                    <p className="text-gray-600 mb-8">
-                        Sign up to start protecting your plants
-                    </p>
-
-                    {/* FULL NAME */}
-                    <div className="mb-4">
-                        <label className="block mb-2 text-sm font-medium">
-                            Full Name
-                        </label>
-                        <input
-                            type="text"
-                            placeholder="John Doe"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-                        />
-                    </div>
-
-                    {/* EMAIL */}
-                    <div className="mb-4">
-                        <label className="block mb-2 text-sm font-medium">
-                            Email Address
-                        </label>
-                        <input
-                            type="email"
-                            placeholder="you@example.com"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-                        />
-                    </div>
-
-                    {/* PASSWORD */}
-                    <div className="mb-4">
-                        <label className="block mb-2 text-sm font-medium">
-                            Password
-                        </label>
-                        <input
-                            type="password"
-                            placeholder="••••••••"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-                        />
-                        <p className="text-xs text-gray-500 mt-2">
-                            Must be at least 8 characters
-                        </p>
-                    </div>
-
-                    {/* CONFIRM PASSWORD */}
-                    <div className="mb-6">
-                        <label className="block mb-2 text-sm font-medium">
-                            Confirm Password
-                        </label>
-                        <input
-                            type="password"
-                            placeholder="••••••••"
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-                        />
-                    </div>
-
-                    {/* TERMS */}
-                    <div className="flex items-start gap-2 mb-6 text-sm">
-                        <input type="checkbox" className="mt-1" />
-                        <p>
-                            I agree to the{" "}
-                            <span className="text-green-600 hover:underline cursor-pointer">
-                                Terms of Service
-                            </span>{" "}
-                            and{" "}
-                            <span className="text-green-600 hover:underline cursor-pointer">
-                                Privacy Policy
-                            </span>
-                        </p>
-                    </div>
-
-                    {/* CREATE ACCOUNT BUTTON */}
-                    <button className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition mb-6">
-                        Create Account
-                    </button>
-
-                    {/* DIVIDER */}
-                    <div className="flex items-center mb-6">
-                        <div className="flex-grow h-px bg-gray-300"></div>
-                        <span className="mx-4 text-sm text-gray-500">
-                            Or sign up with
-                        </span>
-                        <div className="flex-grow h-px bg-gray-300"></div>
-                    </div>
-
-                    {/* SOCIAL */}
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                        <button className="border border-gray-300 py-2 rounded-lg hover:bg-gray-50 transition">
-                            Google
-                        </button>
-
-                        <button className="border border-gray-300 py-2 rounded-lg hover:bg-gray-50 transition">
-                            GitHub
-                        </button>
-                    </div>
-
-                    {/* SIGN IN LINK */}
-                    <p className="text-center text-sm">
-                        Already have an account?{" "}
-                        <Link to="/signin" className="text-green-600 font-medium hover:underline">
-                            Sign in
-                        </Link>
-                    </p>
-
-                    <div className="text-center mt-4">
-                        <Link to="/" className="text-sm text-gray-500 hover:underline">
-                            ← Back to home
-                        </Link>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    );
+			<p className="mt-8 text-center text-sm text-gray-600">
+				Already have an account?{" "}
+				<Link
+					to="/signin"
+					className="font-semibold text-green-600 hover:text-green-700"
+				>
+					Sign in
+				</Link>
+			</p>
+		</div>
+	);
 }
-
-export default SignUp;

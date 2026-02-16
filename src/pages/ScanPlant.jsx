@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function ScanPlant() {
     const fileInputRef = useRef(null);
+    const [setPreview] = useState(null);
     const [selectedPlant, setSelectedPlant] = useState(null);
 
     const handleButtonClick = (plant) => {
@@ -14,15 +15,17 @@ export default function ScanPlant() {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
+            setPreview(URL.createObjectURL(file));
+            console.log("Selected file:", file);
             console.log("Plant:", selectedPlant);
             console.log("File:", file);
         }
     };
 
     return (
-        <div className="min-h-screen bg-[#c7d8cf]">
+        <div className="min-h-screen bg-[#c7d8cf]" >
             {/* Navbar */}
-            <nav className="bg-white shadow-sm py-4 px-6 flex justify-between items-center">
+            < nav className="bg-white shadow-sm py-4 px-6 flex justify-between items-center" >
                 <Link to="/">
                     <div className="flex items-center gap-2">
                         <Leaf className="text-green-600" />
@@ -34,6 +37,7 @@ export default function ScanPlant() {
                 </a>
             </nav>
             <div className="min-h-screen bg-[#c7d8cf] flex flex-col items-center px-4 py-10">
+
                 {/* Logo */}
                 <div className="bg-green-600 w-16 h-16 rounded-full flex items-center justify-center mb-6">
                     <Leaf className="text-white" size={28} />
@@ -63,7 +67,6 @@ export default function ScanPlant() {
                             <p className="text-gray-600 mb-6">
                                 Detect potato diseases and leaf issues
                             </p>
-
                             <button
                                 onClick={() => handleButtonClick("potato")}
                                 className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition"
@@ -72,6 +75,15 @@ export default function ScanPlant() {
                             </button>
 
                         </div>
+
+                        <input
+                            type="file"
+                            accept="image/*"
+                            capture="environment"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            className="hidden"
+                        />
 
                         {/* Tomato Card */}
                         <div className="border-2 border-red-300 rounded-xl p-8 bg-red-50 flex flex-col items-center text-center">
@@ -87,9 +99,7 @@ export default function ScanPlant() {
                             >
                                 Select Tomato
                             </button>
-
                         </div>
-
                         <input
                             type="file"
                             accept="image/*"
@@ -98,36 +108,36 @@ export default function ScanPlant() {
                             onChange={handleFileChange}
                             className="hidden"
                         />
-
                     </div>
                 </div>
+            </div>
 
-                {/* Features Section */}
-                <div className="grid md:grid-cols-3 gap-6 mt-10 w-full max-w-4xl">
+            {/* Features Section */}
+            <div className="grid md:grid-cols-3 gap-6 mt-10 w-full max-w-4xl">
 
-                    <FeatureCard
-                        icon={<Camera size={24} />}
-                        title="Take a Photo"
-                        text="Use your device camera for instant analysis"
-                    />
+                <FeatureCard
+                    icon={<Camera size={24} />}
+                    title="Take a Photo"
+                    text="Use your device camera for instant analysis"
+                />
 
-                    <FeatureCard
-                        icon={<Leaf size={24} />}
-                        title="AI Analysis"
-                        text="Advanced detection of plant health issues"
-                    />
+                <FeatureCard
+                    icon={<Leaf size={24} />}
+                    title="AI Analysis"
+                    text="Advanced detection of plant health issues"
+                />
 
-                    <FeatureCard
-                        icon={<CheckCircle size={24} />}
-                        title="Get Advice"
-                        text="Receive personalized care recommendations"
-                    />
+                <FeatureCard
+                    icon={<CheckCircle size={24} />}
+                    title="Get Advice"
+                    text="Receive personalized care recommendations"
+                />
 
-                </div>
             </div>
         </div>
     );
 }
+
 
 /* ---------- Feature Card ---------- */
 
@@ -141,4 +151,4 @@ function FeatureCard({ icon, title, text }) {
             <p className="text-gray-600 text-sm">{text}</p>
         </div>
     );
-}
+} 
