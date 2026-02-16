@@ -151,4 +151,4 @@ function FeatureCard({ icon, title, text }) {
             <p className="text-gray-600 text-sm">{text}</p>
         </div>
     );
-} z
+} 
